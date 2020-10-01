@@ -2,12 +2,27 @@
 version: 2.1
 # Use a package of configuration called an orb.
 orbs:
-  # Declare a dependency on the welcome-orb
-  welcome: circleci/welcome-orb@0.4.1
+  node: circleci/node@1.1
+  heroku: circleci/heroku@1.2.2
 # Orchestrate or schedule a set of jobs
+jobs:
+  build:
+    executor:
+      name: node/default
+      tag: "10.4"
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: npm install
+      # - run: npm run test
 workflows:
-  # Name the workflow "welcome"
-  welcome:
-    # Run the welcome/run job in its own container
+  heroku_deploy:
     jobs:
-      - welcome/run
+      - build
+      - heroku/deploy-via-git:
+          requires:
+            - build # only run deploy-via-git job if the build job has completed
+          filters:
+            branches:
+              only: master # only run deploy-via-git job on master branch
