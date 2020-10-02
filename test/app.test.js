@@ -26,6 +26,7 @@ describe("Button suite", function () {
       //  oldMessage ===
       //   this.dom.window.document.getElementById("message").innerHTML
       // ).equal();
+
       resolve();
     });
   });
