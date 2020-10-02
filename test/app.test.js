@@ -1,29 +1,32 @@
-function eventFire(el, etype) {
-  if (el.fireEvent) {
-    el.fireEvent("on" + etype);
-  } else {
-    var evObj = document.createEvent("Events");
-    evObj.initEvent(etype, true, false);
-    el.dispatchEvent(evObj);
-  }
-}
+const jsdom = require("jsdom");
+const { expect } = require("chai");
+const fs = require("fs");
+const path = require("path");
+const { JSDOM } = jsdom;
 
 describe("Button suite", function () {
   beforeEach(function () {
-    const messageFixture = document.createElement("div");
-    const buttonFixture = document.createElement("button");
-    messageFixture.setAttribute("id", "message");
-    buttonFixture.setAttribute("id", "button");
-    document.body.appendChild(messageFixture);
-    document.body.appendChild(buttonFixture);
+    const dom = new JSDOM(fs.readFileSync("./src/index.html"), {
+      resources: "usable",
+      url: "file://" + path.join(__dirname, "../src/"),
+      runScripts: "dangerously",
+    });
+    this.dom = dom;
   });
 
-  it("changes the message", function () {
-    const message = document.getElementById("message");
-    const button = document.getElementById("button");
-    const oldMessage = message.innerHTML;
-    window.setupCongratulations(); // setup
-    eventFire(button, "click"); // simulate click event
-    expect(oldMessage === message.innerHTML).toBeFalse();
+  it("changes the message", function (resolve) {
+    this.dom.window.addEventListener("DOMContentLoaded", () => {
+      const oldMessage = this.dom.window.document.getElementById("message")
+        .innerHTML;
+      this.dom.window.eval("button.click();");
+      // console.log(this.dom.window.document.getElementById("message").innerHTML);
+      console.log(oldMessage);
+      //expect(
+      //  false,
+      //  oldMessage ===
+      //   this.dom.window.document.getElementById("message").innerHTML
+      // ).equal();
+      resolve();
+    });
   });
 });
