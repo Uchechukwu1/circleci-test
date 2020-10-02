@@ -19,7 +19,13 @@ describe("Button suite", function () {
       const oldMessage = this.dom.window.document.getElementById("message")
         .innerHTML;
       this.dom.window.eval("button.click();");
-
+      expect(
+        this.dom.window.document.getElementById("message").innerHTML,
+        "should not be equal"
+      ).to.not.be.equal(oldMessage);
+      expect(
+        this.dom.window.document.getElementById("message").innerHTML
+      ).to.be.equal("<h1>Congratulations Uche on the New Job !!</h1>");
       resolve();
     });
   });
