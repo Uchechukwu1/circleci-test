@@ -19,13 +19,6 @@ describe("Button suite", function () {
       const oldMessage = this.dom.window.document.getElementById("message")
         .innerHTML;
       this.dom.window.eval("button.click();");
-      // console.log(this.dom.window.document.getElementById("message").innerHTML);
-      console.log(oldMessage);
-      //expect(
-      //  false,
-      //  oldMessage ===
-      //   this.dom.window.document.getElementById("message").innerHTML
-      // ).equal();
 
       resolve();
     });
