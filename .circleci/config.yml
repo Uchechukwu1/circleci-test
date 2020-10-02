@@ -13,9 +13,9 @@ jobs:
     steps:
       - checkout
       - node/with-cache:
-
-      - run: npm install
-      - run: npm test
+          steps:
+            - run: npm install
+              - run: npm run test
 workflows:
   heroku_deploy:
     jobs:
